@@ -1,0 +1,5 @@
+package ru.qusarun.quscrypt.cipher;
+
+public enum CipherType {
+    MONOALPHABETIC_SINGLE, MONOALPHABETIC_SEQUENCE, POLYALPHABETIC, TRANSPOSITION, CASE, BINARY
+}
