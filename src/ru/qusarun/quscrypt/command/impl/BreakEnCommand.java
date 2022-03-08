@@ -46,6 +46,8 @@ public class BreakEnCommand extends Command {
                             final String result = cipher.decrypt(message);
                             if (result.equalsIgnoreCase(message))
                                 continue;
+                            if (a == 3 && cipher.getName().equals("Caesar"))
+                                System.out.println(result + " " + StringUtil.isValidEnglish(result));
                             if ((cipher.producesNonASCII() && StringUtil.isValidEnglishString(result)) || StringUtil.isValidEnglish(result)) {
                                 ciphers.add(cipher.getName() + "%R(%b" + a + "%R)");
                                 message = result;
@@ -98,7 +100,7 @@ public class BreakEnCommand extends Command {
         }
 
         printPath(ciphers);
-        return "Decryption failed";
+        return "Decryption failed.";
     }
 
     public void printPath(final List<String> ciphers) {

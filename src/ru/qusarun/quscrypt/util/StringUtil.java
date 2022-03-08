@@ -35,7 +35,7 @@ public class StringUtil {
     public static void read(final List<String> list, final String file) {
         list.clear();
         try {
-            final BufferedReader br = new BufferedReader(new FileReader(file, file.equals("русский")? StandardCharsets.ISO_8859_1 : StandardCharsets.UTF_16));
+            final BufferedReader br = new BufferedReader(new FileReader(file, file.equals("русский")? StandardCharsets.ISO_8859_1 : StandardCharsets.UTF_8));
             String line;
             while ((line = br.readLine()) != null) {
                 if (!line.isEmpty() && !line.startsWith("#!comment"))

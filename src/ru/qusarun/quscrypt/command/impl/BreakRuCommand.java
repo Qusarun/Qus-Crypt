@@ -80,7 +80,7 @@ public class BreakRuCommand extends Command {
         }
 
         printPath(ciphers);
-        return "Decryption failed";
+        return "Расшифровка не удалась.";
     }
 
     public void printPath(final List<String> ciphers) {

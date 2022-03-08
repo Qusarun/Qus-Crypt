@@ -81,7 +81,7 @@ public class BreakDeCommand extends Command {
         }
 
         printPath(ciphers);
-        return "Decryption failed";
+        return "Entschlüsselung fehlgeschlagen.";
     }
 
     public void printPath(final List<String> ciphers) {
