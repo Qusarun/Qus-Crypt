@@ -24,16 +24,6 @@ public class ClassUtil {
         return result;
     }
 
-    public static List<Class<?>> findClasses(String packageName) { return new BufferedReader(new InputStreamReader(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"))))).lines().filter(line -> line.endsWith(".class")).map(line -> getClass(line, packageName)).collect(Collectors.toList()); }
-
-    public static Class<?> getClass(String className, String packageName) {
-        try {
-            return Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
-        } catch (ClassNotFoundException ignored) {
-            return null;
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public static <T> T getField(final String name, final Object object, final Class<?> clazz) {
         try {

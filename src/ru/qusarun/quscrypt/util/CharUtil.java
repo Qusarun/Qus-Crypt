@@ -6,11 +6,19 @@ public class CharUtil {
     /* I know that java already has this function, but it doesn't quite work as I'd like it to, so I made a custom one :> */
     public static boolean isLetter(final char c) { return EN_ALPHABET.contains(str(toCase(c, 0))); }
 
+    public static boolean isLetterDe(final char c) { return DE_ALPHABET.contains(str(toCase(c, 0))); }
+
+    public static boolean isLetterRu(final char c) { return RU_ALPHABET.contains(str(toCase(c, 0))); }
+
     public static boolean isSymbol(final char c) { return SYMBOLS.contains(str(c)); }
 
     public static boolean isWhitespace(final char c) { return c == ' ' || c == '\n' || c == '\r' || c == '\t'; }
 
     public static boolean isValidChar(final char c) { return isLetter(c) || isSymbol(c) || isWhitespace(c); }
+
+    public static boolean isValidCharDe(final char c) { return isLetterDe(c) || isSymbol(c) || isWhitespace(c); }
+
+    public static boolean isValidCharRu(final char c) { return isLetterRu(c) || isSymbol(c) || isWhitespace(c); }
 
     /* returns 0 if the character is lowercase or can't have a case and 1 if the character is uppercase */
     public static int getCase(final char c) { return c == toCase(c, 0)? 0 : 1; }

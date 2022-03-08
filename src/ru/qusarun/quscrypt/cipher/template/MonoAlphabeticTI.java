@@ -7,13 +7,14 @@ import ru.qusarun.quscrypt.util.StringUtil;
 
 public class MonoAlphabeticTI extends Cipher {
     private final AlphabetBuilderI builder;
+    private final String alphabet = this.getClass().getSimpleName().endsWith("Ru")? CharUtil.RU_ALPHABET : this.getClass().getSimpleName().endsWith("De")? CharUtil.DE_ALPHABET : CharUtil.EN_ALPHABET;
 
     public MonoAlphabeticTI(final AlphabetBuilderI builder) {
         super();
         this.builder = builder;
     }
 
-    @Override public String encrypt(final String message) { return StringUtil.map(message, CharUtil.EN_ALPHABET, builder.build((int) intKeyA)); }
+    @Override public String encrypt(final String message) { return StringUtil.map(message, alphabet, builder.build((int) intKeyA)); }
 
-    @Override public String decrypt(final String message) { return StringUtil.map(message, builder.build((int) intKeyA), CharUtil.EN_ALPHABET); }
+    @Override public String decrypt(final String message) { return StringUtil.map(message, builder.build((int) intKeyA), alphabet); }
 }

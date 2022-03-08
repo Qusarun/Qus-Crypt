@@ -6,5 +6,5 @@ Launch any of the jars in the build directory with
 ```
 java -jar QusCrypt-x.x.jar
 ```
-Note: you also need the English dictionary to be in the same folder as the jar.
+Note: you also need the "dictionaries" directory to be in the same directory as the jar.
 Further instructions can be found by executing the "help" command.

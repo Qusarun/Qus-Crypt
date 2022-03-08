@@ -3,26 +3,48 @@ package ru.qusarun.quscrypt.util;
 import ru.qusarun.flogger.Logger;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class StringUtil {
-    public static final List<String> EN_WORDS = new ArrayList<>();
+    public static final List<String> EN_WORDS = new ArrayList<>(), DE_WORDS = new ArrayList<>(), RU_WORDS = new ArrayList<>();
 
     static {
+        read(EN_WORDS, "dictionaries/english");
+        read(DE_WORDS, "dictionaries/deutsch");
+
         try {
-            final BufferedReader br = new BufferedReader(new FileReader("english.txt"));
+            final BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("dictionaries/русский"), "Cp1251"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.isEmpty())
+                    RU_WORDS.add(line.toLowerCase());
+            }
+
+            br.close();
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void read(final List<String> list, final String file) {
+        list.clear();
+        try {
+            final BufferedReader br = new BufferedReader(new FileReader(file, file.equals("русский")? StandardCharsets.ISO_8859_1 : StandardCharsets.UTF_16));
             String line;
             while ((line = br.readLine()) != null) {
                 if (!line.isEmpty() && !line.startsWith("#!comment"))
-                    EN_WORDS.add(line);
+                    list.add(line.toLowerCase());
             }
 
             br.close();
         } catch (Exception ignored) {
-            Logger.log("Failed to read %benglish.txt");
+            Logger.log("Failed to read %b" + file);
         }
     }
 
@@ -68,15 +90,42 @@ public class StringUtil {
         return result.toString();
     }
 
-    public static boolean isValidString(final String s) {
+    public static boolean isValidRussianString(final String s) {
+        for (final char c: s.toCharArray()) if (!CharUtil.isValidCharRu(c)) return false;
+        return true;
+    }
+
+    public static boolean isValidGermanString(final String s) {
+        for (final char c: s.toCharArray()) if (!CharUtil.isValidCharDe(c)) return false;
+        return true;
+    }
+
+    public static boolean isValidEnglishString(final String s) {
         for (final char c: s.toCharArray()) if (!CharUtil.isValidChar(c)) return false;
         return true;
     }
 
-    public static boolean isValidEnglish(final String s) {
+    public static boolean isValidRussian(final String s) {
+        if (!isValidRussianString(s)) return false;
         int valid = 0;
         for (final String word: s.replace("!", "").replace("?", "").replace(",", "").replace(".", "").replace(":", "").split(" "))
-            valid += contains(word.toLowerCase(), EN_WORDS) ? 1 : 0;
+            valid += RU_WORDS.contains(word.toLowerCase()) ? 1 : 0;
+        return valid > s.split(" ").length * 0.75;
+    }
+
+    public static boolean isValidGerman(final String s) {
+        if (!isValidGermanString(s)) return false;
+        int valid = 0;
+        for (final String word: s.replace("!", "").replace("?", "").replace(",", "").replace(".", "").replace(":", "").split(" "))
+            valid += DE_WORDS.contains(word.toLowerCase()) ? 1 : 0;
+        return valid > s.split(" ").length * 0.75;
+    }
+
+    public static boolean isValidEnglish(final String s) {
+        if (!isValidEnglishString(s)) return false;
+        int valid = 0;
+        for (final String word: s.replace("!", "").replace("?", "").replace(",", "").replace(".", "").replace(":", "").split(" "))
+            valid += EN_WORDS.contains(word.toLowerCase()) ? 1 : 0;
         return valid > s.split(" ").length * 0.75;
     }
 

@@ -9,7 +9,9 @@ import java.util.List;
 
 public class CommandManager {
     @Getter private final List<Command> commands = ClassUtil.createInstances(List.of(
-            BreakCommand.class,
+            BreakDeCommand.class,
+            BreakEnCommand.class,
+            BreakRuCommand.class,
             CipherCommand.class,
             CiphersCommand.class,
             ClearCommand.class,
