@@ -4,7 +4,7 @@ import ru.qusarun.flogger.Logger;
 import ru.qusarun.quscrypt.QusCrypt;
 import ru.qusarun.quscrypt.cipher.Cipher;
 import ru.qusarun.quscrypt.cipher.KeyType;
-import ru.qusarun.quscrypt.cipher.english.Vigenere;
+import ru.qusarun.quscrypt.cipher.impl.english.Vigenere;
 import ru.qusarun.quscrypt.command.Command;
 import ru.qusarun.quscrypt.command.CommandInfo;
 import ru.qusarun.quscrypt.util.MathUtil;
@@ -46,8 +46,6 @@ public class BreakEnCommand extends Command {
                             final String result = cipher.decrypt(message);
                             if (result.equalsIgnoreCase(message))
                                 continue;
-                            if (a == 3 && cipher.getName().equals("Caesar"))
-                                System.out.println(result + " " + StringUtil.isValidEnglish(result));
                             if ((cipher.producesNonASCII() && StringUtil.isValidEnglishString(result)) || StringUtil.isValidEnglish(result)) {
                                 ciphers.add(cipher.getName() + "%R(%b" + a + "%R)");
                                 message = result;

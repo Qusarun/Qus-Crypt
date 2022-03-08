@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class StringUtil {
-    public static final List<String> EN_WORDS = new ArrayList<>(), DE_WORDS = new ArrayList<>(), RU_WORDS = new ArrayList<>();
+    public static final List<String> EN_WORDS = new ArrayList<>(), DE_WORDS = new ArrayList<>(), RU_WORDS = new ArrayList<>(), TP_WORDS = new ArrayList<>();
 
     static {
         read(EN_WORDS, "dictionaries/english");
@@ -30,6 +30,8 @@ public class StringUtil {
         } catch (final Exception e) {
             e.printStackTrace();
         }
+
+        read(TP_WORDS, "dictionaries/toki pona");
     }
 
     public static void read(final List<String> list, final String file) {
@@ -90,6 +92,11 @@ public class StringUtil {
         return result.toString();
     }
 
+    public static boolean isValidTokiPonaString(final String s) {
+        for (final char c: s.toCharArray()) if (!CharUtil.isValidCharTp(c)) return false;
+        return true;
+    }
+
     public static boolean isValidRussianString(final String s) {
         for (final char c: s.toCharArray()) if (!CharUtil.isValidCharRu(c)) return false;
         return true;
@@ -103,6 +110,21 @@ public class StringUtil {
     public static boolean isValidEnglishString(final String s) {
         for (final char c: s.toCharArray()) if (!CharUtil.isValidChar(c)) return false;
         return true;
+    }
+
+    public static int getValidTokiPona(final String s) {
+        int valid = 0;
+        for (final String word: s.replace("!", "").replace("?", "").replace(",", "").replace(".", "").replace(":", "").split(" "))
+            valid += TP_WORDS.contains(word) ? 1 : 0;
+        return valid;
+    }
+
+    public static boolean isValidTokiPona(final String s) {
+        if (!isValidTokiPonaString(s)) return false;
+        int valid = 0;
+        for (final String word: s.replace("!", "").replace("?", "").replace(",", "").replace(".", "").replace(":", "").split(" "))
+            valid += TP_WORDS.contains(word) ? 1 : 0;
+        return valid > s.split(" ").length * 0.75;
     }
 
     public static boolean isValidRussian(final String s) {

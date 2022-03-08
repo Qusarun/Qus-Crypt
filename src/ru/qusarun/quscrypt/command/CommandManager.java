@@ -12,6 +12,7 @@ public class CommandManager {
             BreakDeCommand.class,
             BreakEnCommand.class,
             BreakRuCommand.class,
+            BreakTpCommand.class,
             CipherCommand.class,
             CiphersCommand.class,
             ClearCommand.class,

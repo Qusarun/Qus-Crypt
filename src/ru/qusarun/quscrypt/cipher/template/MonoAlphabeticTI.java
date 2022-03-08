@@ -7,7 +7,7 @@ import ru.qusarun.quscrypt.util.StringUtil;
 
 public class MonoAlphabeticTI extends Cipher {
     private final AlphabetBuilderI builder;
-    private final String alphabet = this.getClass().getSimpleName().endsWith("Ru")? CharUtil.RU_ALPHABET : this.getClass().getSimpleName().endsWith("De")? CharUtil.DE_ALPHABET : CharUtil.EN_ALPHABET;
+    private final String alphabet = this.getClass().getSimpleName().endsWith("Tp")? CharUtil.TP_ALPHABET : this.getClass().getSimpleName().endsWith("Ru")? CharUtil.RU_ALPHABET : this.getClass().getSimpleName().endsWith("De")? CharUtil.DE_ALPHABET : CharUtil.EN_ALPHABET;
 
     public MonoAlphabeticTI(final AlphabetBuilderI builder) {
         super();

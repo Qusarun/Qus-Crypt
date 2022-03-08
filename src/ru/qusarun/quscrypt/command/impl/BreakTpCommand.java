@@ -4,22 +4,27 @@ import ru.qusarun.flogger.Logger;
 import ru.qusarun.quscrypt.QusCrypt;
 import ru.qusarun.quscrypt.cipher.Cipher;
 import ru.qusarun.quscrypt.cipher.KeyType;
+import ru.qusarun.quscrypt.cipher.impl.english.Vigenere;
+import ru.qusarun.quscrypt.cipher.impl.toki_pona.VigenereTp;
 import ru.qusarun.quscrypt.command.Command;
 import ru.qusarun.quscrypt.command.CommandInfo;
+import ru.qusarun.quscrypt.util.CharUtil;
 import ru.qusarun.quscrypt.util.MathUtil;
 import ru.qusarun.quscrypt.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
-@CommandInfo(usage = "breakde <message>", description = "automatically decrypts German messages")
-public class BreakDeCommand extends Command {
-    private static final int ITERATIONS = 3;
+@CommandInfo(usage = "breaktp <message>", description = "automatically decrypts Toki Pona messages")
+public class BreakTpCommand extends Command {
+    private static final int ITERATIONS = 5;
 
     @Override public boolean execute(final String[] args) { return args.length < 1? invalidUsage() : Logger.log(decrypt(StringUtil.join(args))); }
 
     public String decrypt(String message) {
-        if (StringUtil.isValidGerman(message))
+        if (StringUtil.isValidTokiPona(message))
             return message + " is already plain text";
 
         final List<String> ciphers = new ArrayList<>();
@@ -30,7 +35,7 @@ public class BreakDeCommand extends Command {
                         final String result = cipher.decrypt(message);
                         if (result.equalsIgnoreCase(message))
                             continue;
-                        if ((cipher.producesNonASCII() && StringUtil.isValidGermanString(result)) || StringUtil.isValidGerman(result)) {
+                        if ((cipher.producesNonASCII() && StringUtil.isValidTokiPonaString(result)) || StringUtil.isValidTokiPona(result)) {
                             ciphers.add(cipher.getName());
                             message = result;
                         }
@@ -45,7 +50,7 @@ public class BreakDeCommand extends Command {
                             final String result = cipher.decrypt(message);
                             if (result.equalsIgnoreCase(message))
                                 continue;
-                            if ((cipher.producesNonASCII() && StringUtil.isValidGermanString(result)) || StringUtil.isValidGerman(result)) {
+                            if ((cipher.producesNonASCII() && StringUtil.isValidTokiPonaString(result)) || StringUtil.isValidTokiPona(result)) {
                                 ciphers.add(cipher.getName() + "%R(%b" + a + "%R)");
                                 message = result;
                             }
@@ -63,7 +68,7 @@ public class BreakDeCommand extends Command {
                                 final String result = cipher.decrypt(message);
                                 if (result.equalsIgnoreCase(message))
                                     continue;
-                                if ((cipher.producesNonASCII() && StringUtil.isValidGermanString(result)) || StringUtil.isValidGerman(result)) {
+                                if ((cipher.producesNonASCII() && StringUtil.isValidTokiPonaString(result)) || StringUtil.isValidTokiPona(result)) {
                                     ciphers.add(cipher.getName() + "%R(%b" + a + "%R, %b" + b + "%R)");
                                     message = result;
                                 }
@@ -72,15 +77,45 @@ public class BreakDeCommand extends Command {
                     }
                 }
 
-                if (StringUtil.isValidGerman(message)) {
+                if (StringUtil.isValidTokiPona(message)) {
                     printPath(ciphers);
                     return message;
                 }
             }
         }
 
+        final VigenereTp vigenere = (VigenereTp) QusCrypt.INSTANCE.getCipherManager().getCipherByName("VigenereTp");
+        for (final String word: StringUtil.TP_WORDS) {
+            vigenere.setKey(word);
+            final String result = vigenere.decrypt(message);
+            if (result.equalsIgnoreCase(message))
+                continue;
+            if (StringUtil.isValidTokiPona(result)) {
+                ciphers.add(vigenere.getName() + "%R(%b" + word + "%R)");
+                message = result;
+                printPath(ciphers);
+                return message;
+            }
+        }
+
         printPath(ciphers);
-        return "Entschlüsselung fehlgeschlagen.";
+        return "Decryption failed.";
+    }
+
+    public boolean matches(final String word, final String pattern) {
+        return word.length() == pattern.length() && toPattern(word).equals(toPattern(pattern));
+    }
+
+    public String toPattern(final String s) {
+        final StringBuilder   result = new StringBuilder();
+        final List<Character> chars  = new ArrayList<>();
+        for (final char c: s.toCharArray()) {
+            if (!chars.contains(c))
+                chars.add(c);
+            result.append(CharUtil.TP_ALPHABET.charAt(chars.indexOf(c)));
+        }
+
+        return result.toString();
     }
 
     public void printPath(final List<String> ciphers) {

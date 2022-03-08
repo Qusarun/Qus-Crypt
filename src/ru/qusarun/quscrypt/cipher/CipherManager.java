@@ -1,9 +1,10 @@
 package ru.qusarun.quscrypt.cipher;
 
 import lombok.Getter;
-import ru.qusarun.quscrypt.cipher.english.*;
-import ru.qusarun.quscrypt.cipher.german.*;
-import ru.qusarun.quscrypt.cipher.russian.*;
+import ru.qusarun.quscrypt.cipher.impl.english.*;
+import ru.qusarun.quscrypt.cipher.impl.german.*;
+import ru.qusarun.quscrypt.cipher.impl.russian.*;
+import ru.qusarun.quscrypt.cipher.impl.toki_pona.*;
 import ru.qusarun.quscrypt.util.ClassUtil;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.List;
 public class CipherManager {
     @Getter private final List<Cipher> ciphers = ClassUtil.createInstances(List.of(
             A1A33.class,
+            A1J14.class,
             A1Z26.class,
             A1Z30.class,
             A01A33.class,
+            A01J14.class,
             A01Z26.class,
             A01Z30.class,
             Affine.class,
@@ -21,6 +24,7 @@ public class CipherManager {
             Atbash.class,
             AtbashDe.class,
             AtbashRu.class,
+            AtbashTp.class,
             Baconian.class,
             BaconianBin.class,
             Base16.class,
@@ -33,6 +37,7 @@ public class CipherManager {
             Caesar.class,
             CaesarDe.class,
             CaesarRu.class,
+            CaesarTp.class,
             Cross.class,
             Decabit.class,
             Dvorak.class,
@@ -45,6 +50,7 @@ public class CipherManager {
             Note.class,
             NoteDe.class,
             NoteRu.class,
+            NoteTp.class,
             Octal.class,
             Phone.class,
             QusCrypt1.class,
@@ -58,6 +64,7 @@ public class CipherManager {
             Vigenere.class,
             VigenereDe.class,
             VigenereRu.class,
+            VigenereTp.class,
             XOR.class
     ));
 
