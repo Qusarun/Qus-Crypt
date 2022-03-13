@@ -29,6 +29,7 @@ public class BreakTpCommand extends Command {
 
         final List<String> ciphers = new ArrayList<>();
         for (int i = 0; i < ITERATIONS; i++) {
+            int j = ciphers.size();
             for (final Cipher cipher: QusCrypt.INSTANCE.getCipherManager().getCiphers()) {
                 if (cipher.getKeyType() == KeyType.NONE) {
                     try {
@@ -82,6 +83,9 @@ public class BreakTpCommand extends Command {
                     return message;
                 }
             }
+
+            if (j == ciphers.size())
+                break;
         }
 
         final VigenereTp vigenere = (VigenereTp) QusCrypt.INSTANCE.getCipherManager().getCipherByName("VigenereTp");
